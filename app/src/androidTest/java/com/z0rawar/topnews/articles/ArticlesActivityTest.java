@@ -1,4 +1,4 @@
-package com.monzo.androidtest.articles;
+package com.z0rawar.topnews.articles;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;

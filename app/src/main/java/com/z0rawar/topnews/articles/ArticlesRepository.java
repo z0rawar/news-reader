@@ -1,10 +1,10 @@
-package com.monzo.androidtest.articles;
+package com.z0rawar.topnews.articles;
 
 
-import com.monzo.androidtest.api.GuardianService;
-import com.monzo.androidtest.api.model.ApiArticle;
-import com.monzo.androidtest.articles.model.Article;
-import com.monzo.androidtest.articles.model.ArticleMapper;
+import com.z0rawar.topnews.persistance.apiModel.GuardianService;
+import com.z0rawar.topnews.persistance.apiModel.ApiArticle;
+import com.z0rawar.topnews.articles.model.Article;
+import com.z0rawar.topnews.articles.model.ArticleMapper;
 
 import java.util.List;
 
@@ -21,10 +21,12 @@ class ArticlesRepository {
     }
 
     Single<List<Article>> latestFintechArticles() {
-        return guardianService.searchArticles("fintech,brexit").map(articleMapper::map);
+//        return guardianService.searchArticles("fintech,brexit").map(articleMapper::map);
+        return Single.just(null);
     }
 
     Single<ApiArticle> getArticle(String articleUrl) {
-        return guardianService.getArticle(articleUrl, "main,body,headline,thumbnail");
+//        return guardianService.getArticle(articleUrl, "main,body,headline,thumbnail");
+        return Single.just(null);
     }
 }

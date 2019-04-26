@@ -1,6 +1,6 @@
-package com.monzo.androidtest.articles;
+package com.z0rawar.topnews.articles;
 
-import com.monzo.androidtest.articles.model.Article;
+import com.z0rawar.topnews.articles.model.Article;
 import com.monzo.androidtest.common.BasePresenter;
 import com.monzo.androidtest.common.BasePresenterView;
 

@@ -1,6 +1,6 @@
-package com.monzo.androidtest.articles.model
+package com.z0rawar.topnews.articles.model
 
-import com.monzo.androidtest.api.model.ApiArticleListResponse
+import com.z0rawar.topnews.persistance.apiModel.ApiArticleListResponse
 import java.util.*
 
 class ArticleMapper {

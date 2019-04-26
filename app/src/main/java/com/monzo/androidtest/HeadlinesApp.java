@@ -3,7 +3,7 @@ package com.monzo.androidtest;
 import android.app.Application;
 import android.content.Context;
 
-import com.monzo.androidtest.articles.ArticlesModule;
+import com.z0rawar.topnews.articles.ArticlesModule;
 
 
 public class HeadlinesApp extends Application {

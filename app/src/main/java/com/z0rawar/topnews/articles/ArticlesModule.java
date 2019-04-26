@@ -1,12 +1,12 @@
-package com.monzo.androidtest.articles;
+package com.z0rawar.topnews.articles;
 
 import android.content.Context;
 import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.monzo.androidtest.R;
-import com.monzo.androidtest.api.GuardianService;
-import com.monzo.androidtest.articles.model.ArticleMapper;
+import com.z0rawar.topnews.persistance.apiModel.GuardianService;
+import com.z0rawar.topnews.articles.model.ArticleMapper;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

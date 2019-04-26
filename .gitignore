@@ -12,3 +12,4 @@ gradlew
 gradlew.bat
 *.sketch
 *.png
+**/build

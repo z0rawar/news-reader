@@ -1,4 +1,4 @@
-package com.monzo.androidtest.api.model
+package com.z0rawar.topnews.persistance.apiModel
 
 
 data class ApiArticleListResponse(val response: ApiArticleList)

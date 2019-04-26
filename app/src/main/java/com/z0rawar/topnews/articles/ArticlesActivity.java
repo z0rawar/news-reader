@@ -1,4 +1,4 @@
-package com.monzo.androidtest.articles;
+package com.z0rawar.topnews.articles;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.monzo.androidtest.HeadlinesApp;
 import com.monzo.androidtest.R;
-import com.monzo.androidtest.articles.model.Article;
+import com.z0rawar.topnews.articles.model.Article;
 import com.monzo.androidtest.common.Event;
 
 import java.util.List;
