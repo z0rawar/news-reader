@@ -1,1 +1,1 @@
-include ':app', ':core', ':topnews'
+include ':app', ':core', ':news'

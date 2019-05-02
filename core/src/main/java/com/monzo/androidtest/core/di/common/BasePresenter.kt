@@ -1,12 +1,12 @@
-package com.monzo.androidtest.common
+package com.monzo.androidtest.core.di.common
 
-import android.support.annotation.CallSuper
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import androidx.annotation.CallSuper
+//import io.reactivex.disposables.CompositeDisposable
+//import io.reactivex.disposables.Disposable
 
 
 open class BasePresenter<in V : BasePresenterView> {
-    private val disposables = CompositeDisposable()
+//    private val disposables = CompositeDisposable()
     private var view: V? = null
 
     @CallSuper
@@ -23,11 +23,11 @@ open class BasePresenter<in V : BasePresenterView> {
             throw IllegalStateException("View is already detached")
         }
         view = null
-        disposables.clear()
+//        disposables.clear()
     }
 
-    @CallSuper
-    protected fun addToUnsubscribe(disposable: Disposable) {
-        disposables.add(disposable)
-    }
+//    @CallSuper
+//    protected fun addToUnsubscribe(disposable: Disposable) {
+//        disposables.add(disposable)
+//    }
 }

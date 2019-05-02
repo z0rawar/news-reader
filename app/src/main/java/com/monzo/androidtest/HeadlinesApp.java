@@ -1,15 +1,15 @@
 package com.monzo.androidtest;
 
-import android.app.Application;
-import android.content.Context;
+import com.monzo.androidtest.di.DaggerApplicationComponent;
 
-import com.z0rawar.topnews.articles.ArticlesModule;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 
 
-public class HeadlinesApp extends Application {
-    private final ArticlesModule articlesModule = new ArticlesModule();
+public class HeadlinesApp extends DaggerApplication {
 
-    public static ArticlesModule from(Context applicationContext) {
-        return ((HeadlinesApp) applicationContext).articlesModule;
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerApplicationComponent.builder().create(this);
     }
 }

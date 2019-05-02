@@ -1,4 +1,4 @@
-package com.monzo.androidtest.common;
+package com.monzo.androidtest.core.di.common;
 
 /**
  * Value type to signify a stream event/notification that we are not interested in.

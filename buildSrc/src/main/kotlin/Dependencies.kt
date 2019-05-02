@@ -23,7 +23,7 @@ object AndroidSdk {
 
 object ProjectModules {
     const val core = ":core"
-    const val topartists = ":topnews"
+    const val news = ":news"
 }
 object Libraries{
     private object Versions {
@@ -32,6 +32,7 @@ object Libraries{
         const val gson = "2.8.1"
         const val okHttp = "3.13.1"
         const val retrofit = "2.5.0"
+        const val archLifecycle = "1.1.1"
     }
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -43,4 +44,6 @@ object Libraries{
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val archLifecycle = "android.arch.lifecycle:extensions:${Versions.archLifecycle}"
+
 }

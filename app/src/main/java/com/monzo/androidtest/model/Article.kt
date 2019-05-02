@@ -1,4 +1,4 @@
-package com.z0rawar.topnews.articles.model
+package com.monzo.androidtest.model
 
 import java.util.*
 
