@@ -1,14 +1,9 @@
 package com.monzo.androidtest.news.di
 
 import com.monzo.androidtest.core.di.CoreNetworkModule
-import com.monzo.androidtest.core.di.providers.DataMapper
-import com.monzo.androidtest.core.di.providers.DataProvider
-import com.monzo.androidtest.news.api.ApiArticleListResponse
-import com.monzo.androidtest.news.api.ApiNewsArticlesProvider
-import com.monzo.androidtest.news.api.Article
-import com.monzo.androidtest.news.api.ArticleListDataMapper
 import com.monzo.androidtest.news.api.GuardianService
-import com.monzo.androidtest.news.entities.NewsArticlesState
+import com.monzo.androidtest.news.di.NewsModule.Companion.GUARDIAN_API_KEY
+import com.monzo.androidtest.news.di.NewsModule.Companion.HEADER_API_KEY
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -18,30 +13,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
+
 @Module(includes = [CoreNetworkModule::class])
 object NetworkModule {
 
     @Provides
-    @Named("API_KEY")
     @JvmStatic
-    internal fun providesApiKey() =
+    internal fun getAuthInterceptor(): Interceptor =
             Interceptor { chain ->
-                val newRequest = chain.request().let { request ->
-                    val newUrl = request.url().newBuilder()
-                            .addQueryParameter("api_key", "enj8pstqu5yat6yesfsdmd39")
-                            .build()
-                    request.newBuilder()
-                            .url(newUrl)
-                            .build()
-                }
-                chain.proceed(newRequest)
+                val original = chain.request()
+                val hb = original.headers().newBuilder()
+                hb.add(HEADER_API_KEY, GUARDIAN_API_KEY)
+                chain.proceed(original.newBuilder().headers(hb.build()).build())
             }
+
 
     @Provides
     @JvmStatic
     internal fun providesOkHttpClient(
             builder: OkHttpClient.Builder,
-            @Named("API_KEY") apiKeyInterceptor: Interceptor
+            apiKeyInterceptor: Interceptor
     ): OkHttpClient =
             builder.addInterceptor(apiKeyInterceptor)
                     .build()
