@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.monzo.androidtest.news.ArticleAdapter
 import com.monzo.androidtest.news.R
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_news_list.rvArticlesList
+import kotlinx.android.synthetic.main.fragment_news_list.*
 import javax.inject.Inject
 
 class NewsListFragment : DaggerFragment() {
