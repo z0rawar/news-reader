@@ -52,5 +52,4 @@ class NewsListFragment : DaggerFragment() {
     private fun showToast(toastMsg: String) {
         Toast.makeText(activity, toastMsg, Toast.LENGTH_SHORT).show()
     }
-
 }
