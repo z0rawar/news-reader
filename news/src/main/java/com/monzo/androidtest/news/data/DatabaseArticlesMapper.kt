@@ -13,7 +13,9 @@ class DatabaseArticlesMapper : DataMapper<Article, NewsArticle> {
                 sectionId = source.sectionId,
                 sectionName = source.sectionName,
                 title = source.title,
-                url = source.url)
+                url = source.url,
+                body = source.body,
+                favourite = source.favourite)
     }
 
     override fun decode(source: NewsArticle): Article {
@@ -23,6 +25,8 @@ class DatabaseArticlesMapper : DataMapper<Article, NewsArticle> {
                 sectionId = source.sectionId,
                 sectionName = source.sectionName,
                 title = source.title,
-                url = source.url)
+                url = source.url,
+                body = source.body,
+                favourite = source.favourite)
     }
 }

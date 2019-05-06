@@ -41,8 +41,32 @@ class NewsDetailsFragment : DaggerFragment() {
                 is NewsDetailsViewState.ShowErrorMessage -> showError(it.errorMessage)
             }
         })
-        setupToolbar()
+        newsDetailsViewModel.favouritesViewState.observe(this, Observer {
+            when(it){
+                is FavouritesViewState.Favourite -> showFilledHeart()
+                is FavouritesViewState.NonFavourite -> showEmptyHeart()
+            }
+        })
         return view
+    }
+
+    private fun showEmptyHeart() {
+        ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_border_white_24dp))
+    }
+
+    private fun showFilledHeart() {
+        ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        newsDetailsViewModel.loadNewsArticleDetails(articleId)
+        setupToolbar()
+        ivFav.setOnClickListener { onFavClicked()}
+    }
+
+    private fun onFavClicked() {
+        newsDetailsViewModel.onFavClicked(articleId)
     }
 
     private fun setupToolbar() {
@@ -50,12 +74,7 @@ class NewsDetailsFragment : DaggerFragment() {
             setSupportActionBar(tbDetail)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        newsDetailsViewModel.loadNewsArticleDetails(articleId)
-
+        ctlDetail.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
     }
 
     private fun showError(errorMessage: String) {
@@ -63,10 +82,10 @@ class NewsDetailsFragment : DaggerFragment() {
     }
 
     private fun showNewsDetails(newsArticle: Article) {
-        Toast.makeText(activity, newsArticle.title, Toast.LENGTH_SHORT).show()
         tvTitle.text = newsArticle.title
         Glide.with(this).load(newsArticle.thumbnail).into(ivThumbnail)
-        tvBody.text = Html.fromHtml(newsArticle.url)
+        newsArticle.body?.let { tvBody.text = Html.fromHtml(it) }
+        if (newsArticle.favourite) ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
     }
 
     private fun showLoading() {

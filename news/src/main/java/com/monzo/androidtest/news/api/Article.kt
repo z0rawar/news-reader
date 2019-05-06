@@ -9,5 +9,7 @@ data class Article(
         val sectionName: String,
         val published: Date,
         val title: String,
-        val url: String
+        val url: String,
+        val body:String?,
+        val favourite: Boolean
 )

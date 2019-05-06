@@ -11,5 +11,5 @@ data class ApiArticle(
         val webUrl: String,
         val apiUrl: String,
         val fields: ApiArticleFields?
-) 
+)
 

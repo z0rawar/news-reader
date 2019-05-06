@@ -30,7 +30,7 @@ class ApiNewsArticlesProvider(
     }
 
     override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
-        apiService.getArticle(id, "body").enqueue(object : Callback<ApiArticleDetailResponse> {
+        apiService.getArticle(id, "body,thumbnail,headline").enqueue(object : Callback<ApiArticleDetailResponse> {
             override fun onFailure(call: Call<ApiArticleDetailResponse>, t: Throwable) {
                 Log.d("z", "failed " + t.localizedMessage)
                 callback(NewsArticlesState.Error(t.localizedMessage))

@@ -19,6 +19,6 @@ abstract class ArticlesDao {
     abstract fun getArticleById(articleId: String): NewsArticle
 
     @Update
-    abstract fun updateAllArticles(newsArticle: NewsArticle)
+    abstract fun updateArticle(newsArticle: NewsArticle)
 
 }

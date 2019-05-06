@@ -18,10 +18,4 @@ class ArticleListDataMapper(val articleDataMapper: DataMapper<ApiArticle, List<A
 
         return articles
     }
-
-    override fun decode(source: List<Article>): ApiArticleListResponse {
-        //TODO
-        return ApiArticleListResponse(ApiArticleList(emptyList()))
-    }
-
 }

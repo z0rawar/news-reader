@@ -26,7 +26,7 @@ class DatabaseNewsArticlesPersister(
 
     override fun updateData(data: List<Article>) {
         val article = data[0]
-        dao.updateAllArticles(mapper.encode(article))
+        dao.updateArticle(mapper.encode(article))
     }
 }
 

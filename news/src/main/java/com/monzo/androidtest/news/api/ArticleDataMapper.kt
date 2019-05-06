@@ -25,7 +25,9 @@ class ArticleDataMapper : DataMapper<ApiArticle, List<Article>> {
                 source.sectionName,
                 source.webPublicationDate,
                 headline,
-                source.apiUrl))
+                source.apiUrl,
+                source.fields?.body,
+                false))
     }
 
 }

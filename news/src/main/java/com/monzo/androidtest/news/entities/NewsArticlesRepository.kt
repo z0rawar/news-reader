@@ -34,17 +34,24 @@ class NewsArticlesRepository(
     override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
         persister.requestData(id) { articles ->
             callback(NewsArticlesState.Success(articles))
-            val article : Article? = articles[0]
-//            if(article?.body.isNullOrEmpty()){ //TODO Change this to body
-                provider.requestData(id){state->
-                    if(state is NewsArticlesState.Success){
-                        GlobalScope.launch (Dispatchers.IO){
+            val article: Article = articles[0]
+            if (article.body.isNullOrEmpty()) {
+                provider.requestData(id) { state ->
+                    if (state is NewsArticlesState.Success) {
+                        GlobalScope.launch(Dispatchers.IO) {
                             persister.updateData(state.articles)
                         }
                     }
-                    callback(state)
+                    when (state) {
+                        is NewsArticlesState.Success -> {
+                            val fullArticle = article.copy(body = state.articles[0].body)
+                            callback(NewsArticlesState.Success(listOf(fullArticle)))
+                        }
+                        else -> callback(state)
+                    }
+
                 }
-//            }
+            }
         }
     }
 }

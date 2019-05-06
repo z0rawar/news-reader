@@ -1,8 +1,10 @@
 package com.monzo.androidtest
 
 import android.os.Bundle
-import dagger.android.support.DaggerAppCompatActivity
+import android.view.MenuItem
 import com.monzo.androidtest.news.view.NewsListFragment
+import dagger.android.support.DaggerAppCompatActivity
+
 
 class HeadlinesActivity : DaggerAppCompatActivity() {
 
@@ -13,5 +15,15 @@ class HeadlinesActivity : DaggerAppCompatActivity() {
             replace(R.id.container, NewsListFragment())
             commit()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
