@@ -20,7 +20,7 @@ class NewsArticlesRepository(
                 provider.requestData { state ->
                     if (state is NewsArticlesState.Success) {
                         GlobalScope.launch(Dispatchers.IO) {
-                            persister.persistData(state.articles)
+                            persister.insertData(state.articles)
                         }
                     }
                     callback(state)
@@ -28,6 +28,23 @@ class NewsArticlesRepository(
             } else {
                 callback(NewsArticlesState.Success(articles))
             }
+        }
+    }
+
+    override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
+        persister.requestData(id) { articles ->
+            callback(NewsArticlesState.Success(articles))
+            val article : Article? = articles[0]
+//            if(article?.body.isNullOrEmpty()){ //TODO Change this to body
+                provider.requestData(id){state->
+                    if(state is NewsArticlesState.Success){
+                        GlobalScope.launch (Dispatchers.IO){
+                            persister.updateData(state.articles)
+                        }
+                    }
+                    callback(state)
+                }
+//            }
         }
     }
 }

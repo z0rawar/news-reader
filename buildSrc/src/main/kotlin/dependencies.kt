@@ -45,6 +45,8 @@ object Libraries {
         const val coroutinesCore = "1.1.1"
         const val coroutinesAndroid = "1.1.1"
         const val recyclerView = "1.0.0"
+        const val constraintLayout = "2.0.0-alpha3"
+
     }
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -69,5 +71,6 @@ object Libraries {
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesCore}"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesAndroid}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
+    const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
 }

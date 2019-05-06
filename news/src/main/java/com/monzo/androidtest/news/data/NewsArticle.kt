@@ -11,5 +11,6 @@ data class NewsArticle(
         val sectionName: String,
         val published: Long,
         val title: String,
-        val url: String
+        val url: String,
+        val favourite: Boolean = false
 )

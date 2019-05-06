@@ -8,8 +8,10 @@ import com.monzo.androidtest.news.api.Article
 import kotlinx.android.synthetic.main.list_item_article.view.*
 import kotlinx.android.synthetic.main.list_item_header.view.*
 import java.util.*
+import com.bumptech.glide.Glide
 
-internal class ArticleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val articles = ArrayList<Any>()
 
@@ -27,7 +29,7 @@ internal class ArticleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         }
         else {
             val view = layoutInflater.inflate(R.layout.list_item_article, parent, false)
-            ArticleViewHolder(view)
+            ArticleViewHolder(view,listener)
         }
     }
 
@@ -46,11 +48,12 @@ internal class ArticleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    internal class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    internal class ArticleViewHolder(view: View, val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
 
         fun bind(article: Article) {
             itemView.tvArticleHeadline.text = article.title
-            //Glide.with(context).load(article.getThumbnail()).into(thumbnailImageView);
+            itemView.setOnClickListener { listener.onItemClick(article.id) }
+            Glide.with(itemView.ivArticleThumbnail).load(article.thumbnail).into(itemView.ivArticleThumbnail)
         }
     }
 
@@ -60,5 +63,8 @@ internal class ArticleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         }
     }
 
+    interface OnItemClickListener{
+        fun onItemClick(articleId: String)
+    }
 
 }

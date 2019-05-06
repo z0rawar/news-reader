@@ -19,7 +19,9 @@ object DatabaseModule {
     @Provides
     @JvmStatic
     internal fun providesDatabase(context: Application): NewsDatabase =
-            Room.databaseBuilder(context, NewsDatabase::class.java, "news").build()
+            Room.databaseBuilder(context, NewsDatabase::class.java, "news")
+                    .fallbackToDestructiveMigration()
+                    .build()
 
     @Provides
     @JvmStatic

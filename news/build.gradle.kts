@@ -38,6 +38,11 @@ dependencies {
     kapt(Libraries.roomCompiler)
     api(Libraries.coroutinesCore)
     api(Libraries.coroutinesAndroid)
+    implementation(Libraries.constraintLayout)
+    implementation(Libraries.glide)
+    kapt(Libraries.glideCompiler)
+
+
 
 }
 repositories {

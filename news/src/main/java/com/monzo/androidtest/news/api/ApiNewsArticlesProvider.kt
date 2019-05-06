@@ -28,4 +28,21 @@ class ApiNewsArticlesProvider(
             }
         })
     }
+
+    override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
+        apiService.getArticle(id, "body").enqueue(object : Callback<ApiArticleDetailResponse> {
+            override fun onFailure(call: Call<ApiArticleDetailResponse>, t: Throwable) {
+                Log.d("z", "failed " + t.localizedMessage)
+                callback(NewsArticlesState.Error(t.localizedMessage))
+            }
+
+            override fun onResponse(call: Call<ApiArticleDetailResponse>, response: Response<ApiArticleDetailResponse>) {
+                response.body()?.also { apiArticleDetailResponse ->
+                    val singleArticleList = ApiArticleListResponse(ApiArticleList(listOf(apiArticleDetailResponse.response.content)))
+                    callback(NewsArticlesState.Success(mapper.encode(singleArticleList)))
+                }
+            }
+        })
+    }
+
 }

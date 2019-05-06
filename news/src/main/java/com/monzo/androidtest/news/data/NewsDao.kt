@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 abstract class ArticlesDao {
@@ -12,7 +13,12 @@ abstract class ArticlesDao {
     abstract fun insertAllArticles(articles: List<NewsArticle>)
 
     @Query("SELECT * FROM NewsArticle")
-    abstract fun getAllArticles() : List<NewsArticle>
+    abstract fun getAllArticles(): List<NewsArticle>
 
+    @Query("SELECT * FROM NewsArticle WHERE id = :articleId")
+    abstract fun getArticleById(articleId: String): NewsArticle
+
+    @Update
+    abstract fun updateAllArticles(newsArticle: NewsArticle)
 
 }

@@ -56,7 +56,7 @@ class NewsArticlesViewModel @Inject constructor(
             launch {
                 withContext(Dispatchers.Main) {
                     mutableLiveData.value = when (item) {
-                        NewsArticlesState.Loading -> NewsArticlesViewState.InProgress
+                        is NewsArticlesState.Loading -> NewsArticlesViewState.InProgress
                         is NewsArticlesState.Success -> NewsArticlesViewState.ShowNewsArticles(getGroupedArticles(item.articles))
                         is NewsArticlesState.Error -> NewsArticlesViewState.ShowErrorMessage(item.error)
                     }

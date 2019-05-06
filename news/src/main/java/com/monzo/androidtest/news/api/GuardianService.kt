@@ -12,6 +12,6 @@ interface GuardianService {
     fun searchArticles(@Query("q") searchTerm: String): Call<ApiArticleListResponse>
 
     @GET
-    fun getArticle(@Url articleUrl: String, @Query("show-fields") fields: String): Call<ApiArticle>
+    fun getArticle(@Url articleUrl: String, @Query("show-fields") fields: String): Call<ApiArticleDetailResponse>
 
 }

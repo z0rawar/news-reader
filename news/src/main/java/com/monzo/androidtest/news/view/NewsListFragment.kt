@@ -15,7 +15,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import javax.inject.Inject
 
-class NewsListFragment : DaggerFragment() {
+class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -25,7 +25,7 @@ class NewsListFragment : DaggerFragment() {
         super.onCreate(savedInstanceState)
         newsArticlesViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(NewsArticlesViewModel::class.java)
-        articleAdapter = ArticleAdapter()
+        articleAdapter = ArticleAdapter(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,9 +39,10 @@ class NewsListFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         rvArticlesList.also {
             it.adapter = articleAdapter
-            it.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
+
     private fun viewStateChanged(newState: NewsArticlesViewState) =
             when (newState) {
                 NewsArticlesViewState.InProgress -> showToast("Loading..")
@@ -52,4 +53,21 @@ class NewsListFragment : DaggerFragment() {
     private fun showToast(toastMsg: String) {
         Toast.makeText(activity, toastMsg, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onItemClick(articleId: String) {
+        //Refactor: Add proper navigation support
+        val fragment = NewsDetailsFragment().apply {
+            arguments = Bundle().apply {
+                this.putString("articleId", articleId)
+            }
+        }
+        activity?.supportFragmentManager?.beginTransaction()?.apply {
+            replace(R.id.container, fragment)
+            addToBackStack(NewsDetailsFragment::class.java.simpleName)
+            commit()
+        }
+
+    }
+
+
 }

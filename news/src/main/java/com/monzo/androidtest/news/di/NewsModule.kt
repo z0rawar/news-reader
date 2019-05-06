@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.monzo.androidtest.core.di.BaseViewModule
 import com.monzo.androidtest.core.di.ViewModelKey
 import com.monzo.androidtest.news.view.NewsArticlesViewModel
+import com.monzo.androidtest.news.view.NewsDetailsFragment
+import com.monzo.androidtest.news.view.NewsDetailsViewModel
 import com.monzo.androidtest.news.view.NewsListFragment
 import dagger.Binds
 import dagger.Module
@@ -30,9 +32,19 @@ abstract class NewsModule {
     @ContributesAndroidInjector
     abstract fun bindsNewsListFragment(): NewsListFragment
 
+    @ContributesAndroidInjector
+    abstract fun bindsNewsDetailsFragment(): NewsDetailsFragment
+
     @Binds
     @IntoMap
     @ViewModelKey(NewsArticlesViewModel::class)
     abstract fun bindNewsArticlesViewModel(newsArticlesViewModel: NewsArticlesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewsDetailsViewModel::class)
+    abstract fun bindNewsDetailsViewModel(newsDetailsViewModel: NewsDetailsViewModel): ViewModel
+
+
 
 }

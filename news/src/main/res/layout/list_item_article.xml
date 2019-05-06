@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
@@ -8,14 +9,15 @@
     <ImageView
         android:id="@+id/ivArticleThumbnail"
         android:layout_width="@dimen/width_iv_thumbnail_article_item"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:src="@tools:sample/avatars"/>
 
     <TextView
         android:id="@+id/tvArticleHeadline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/control_space_mini"
         android:layout_marginEnd="@dimen/control_space_mini"
+        android:layout_marginStart="@dimen/control_space_mini"
         android:fontFamily="sans-serif-regular"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"/>
 </LinearLayout>
