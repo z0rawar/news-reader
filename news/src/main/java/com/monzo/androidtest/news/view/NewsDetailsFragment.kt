@@ -1,10 +1,11 @@
 package com.monzo.androidtest.news.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -27,7 +28,7 @@ class NewsDetailsFragment : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
+        newsDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
                 .get(NewsDetailsViewModel::class.java)
         articleId = arguments?.getString("articleId", "invalid") ?: "invalid"
     }
@@ -42,7 +43,7 @@ class NewsDetailsFragment : DaggerFragment() {
             }
         })
         newsDetailsViewModel.favouritesViewState.observe(this, Observer {
-            when(it){
+            when (it) {
                 is FavouritesViewState.Favourite -> showFilledHeart()
                 is FavouritesViewState.NonFavourite -> showEmptyHeart()
             }
@@ -62,7 +63,7 @@ class NewsDetailsFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         newsDetailsViewModel.loadNewsArticleDetails(articleId)
         setupToolbar()
-        ivFav.setOnClickListener { onFavClicked()}
+        ivFav.setOnClickListener { onFavClicked() }
     }
 
     private fun onFavClicked() {
@@ -81,11 +82,19 @@ class NewsDetailsFragment : DaggerFragment() {
         Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun showNewsDetails(newsArticle: Article) {
         tvTitle.text = newsArticle.title
         Glide.with(this).load(newsArticle.thumbnail).into(ivThumbnail)
-        newsArticle.body?.let { tvBody.text = Html.fromHtml(it) }
+        newsArticle.body?.let {
+            wvDetail.settings.setJavaScriptEnabled(true)
+            wvDetail.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            wvDetail.loadDataWithBaseURL(null, "${getString(R.string.webview_width_fix)}${newsArticle.body}",
+                    "text/html", "utf-8", null)
+
+        }
         if (newsArticle.favourite) ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
+
     }
 
     private fun showLoading() {

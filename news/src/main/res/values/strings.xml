@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">news</string>
+    <string name="webview_width_fix" translatable="false"><![CDATA[<style>img{display: inline;height: auto;max-width: 100%;}</style>]]></string>
 </resources>

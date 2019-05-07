@@ -11,9 +11,11 @@ class HeadlinesActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.container, NewsListFragment())
-            commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.container, NewsListFragment())
+                commit()
+            }
         }
     }
 

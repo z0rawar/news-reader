@@ -38,7 +38,6 @@ class NewsArticlesViewModel @Inject constructor(
     init {
         loadNewsArticles()
     }
-
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -64,9 +63,18 @@ class NewsArticlesViewModel @Inject constructor(
             }
 
     private fun getGroupedArticles(articles: List<Article>): List<Any> {
-        val articlesThisWeek = articles.filter { it.published >= Date(System.currentTimeMillis() - WEEK_IN_MILLIS) }
-        val articlesLastWeek = articles.filter { it.published < Date(System.currentTimeMillis() - WEEK_IN_MILLIS) }
+        val favArticles = articles.filter { it.favourite }
+        val articlesThisWeek = articles.filter {
+            !it.favourite && it.published >= Date(System.currentTimeMillis() - WEEK_IN_MILLIS)
+        }
+        val articlesLastWeek = articles.filter {
+            !it.favourite && it.published < Date(System.currentTimeMillis() - WEEK_IN_MILLIS)
+        }
         val groupedList = mutableListOf<Any>()
+        if (favArticles.isEmpty().not()) {
+            groupedList.add("Favourites")
+            groupedList.addAll(favArticles)
+        }
         if (articlesThisWeek.isEmpty().not()) {
             groupedList.add("This week")
             groupedList.addAll(articlesThisWeek)

@@ -1,6 +1,7 @@
 package com.monzo.androidtest.news.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
     private lateinit var articleAdapter: ArticleAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsArticlesViewModel = ViewModelProviders.of(this, viewModelFactory)
+        newsArticlesViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
                 .get(NewsArticlesViewModel::class.java)
         articleAdapter = ArticleAdapter(this)
     }
@@ -39,7 +40,7 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         rvArticlesList.also {
             it.adapter = articleAdapter
-            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
     }
 
@@ -66,8 +67,5 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
             addToBackStack(NewsDetailsFragment::class.java.simpleName)
             commit()
         }
-
     }
-
-
 }

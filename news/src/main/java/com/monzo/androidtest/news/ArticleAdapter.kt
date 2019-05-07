@@ -44,6 +44,7 @@ internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.
     }
 
     fun showArticles(articles: List<Any>) {
+        this.articles.clear()
         this.articles.addAll(articles)
         notifyDataSetChanged()
     }
