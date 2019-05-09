@@ -46,6 +46,7 @@ object Libraries {
         const val coroutinesAndroid = "1.1.1"
         const val recyclerView = "1.0.0"
         const val constraintLayout = "2.0.0-alpha3"
+        const val archTesting = "2.0.0-alpha1"
 
     }
 
@@ -64,7 +65,7 @@ object Libraries {
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
     const val design = "com.android.support:design:${Versions.design}"
     const val junit = "junit:junit:${Versions.junit}"
-    const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"
+//    const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"
     const val retrofitGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofitGson}"
     const val room = "android.arch.persistence.room:runtime:${Versions.room}"
     const val roomCompiler = "android.arch.persistence.room:compiler:${Versions.roomCompiler}"
@@ -72,5 +73,7 @@ object Libraries {
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesAndroid}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+    const val archTesting = "androidx.arch.core:core-testing:${Versions.archTesting}"
+    const val mockitoCore = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 
 }

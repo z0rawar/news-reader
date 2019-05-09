@@ -1,5 +1,6 @@
 package com.monzo.androidtest.news.view
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -19,7 +20,9 @@ import kotlin.coroutines.CoroutineContext
 
 
 class NewsArticlesViewModel @Inject constructor(
-        @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>
+        @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>,
+        private val uiContext: CoroutineContext = Dispatchers.Main,
+        private val ioContext: CoroutineContext = Dispatchers.IO
 ) : ViewModel(), CoroutineScope {
 
     private var mediatorLiveData: MediatorLiveData<NewsArticlesViewState> = MediatorLiveData()
@@ -27,7 +30,7 @@ class NewsArticlesViewModel @Inject constructor(
         get() = mediatorLiveData
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+        get() = uiContext + job
 
     private val job = Job()
 
@@ -44,8 +47,8 @@ class NewsArticlesViewModel @Inject constructor(
         job.cancel()
     }
 
-    private fun loadNewsArticles() {
-        launch(Dispatchers.IO) {
+    fun loadNewsArticles() {
+        launch(ioContext) {
             dataProvider.requestLiveData {
                 updateView(it)
             }
@@ -53,7 +56,7 @@ class NewsArticlesViewModel @Inject constructor(
     }
 
     fun onListRefreshed() {
-        launch(Dispatchers.IO) {
+        launch(ioContext) {
             dataProvider.requestData {
                 updateView(it)
             }
@@ -62,7 +65,7 @@ class NewsArticlesViewModel @Inject constructor(
 
     private fun updateView(item: LiveData<NewsArticlesState>) {
         launch {
-            withContext(Dispatchers.Main) {
+            withContext(uiContext) {
                 mediatorLiveData.addSource(item) { newsArticleState: NewsArticlesState? ->
                     if (newsArticleState != null) {
                         mediatorLiveData.value = when (newsArticleState) {
@@ -78,7 +81,7 @@ class NewsArticlesViewModel @Inject constructor(
 
     private fun updateView(item: NewsArticlesState) =
             launch {
-                withContext(Dispatchers.Main) {
+                withContext(uiContext) {
                     mediatorLiveData.value = when (item) {
                         is NewsArticlesState.Loading -> NewsArticlesViewState.InProgress
                         is NewsArticlesState.Success -> NewsArticlesViewState.ShowNewsArticles(getGroupedArticles(item.articles))
@@ -105,7 +108,7 @@ class NewsArticlesViewModel @Inject constructor(
             groupedList.addAll(articlesThisWeek)
         }
         if (articlesLastWeek.isEmpty().not()) {
-            groupedList.add("Last Week")
+            groupedList.add("Last week")
             groupedList.addAll(articlesLastWeek)
         }
         return groupedList

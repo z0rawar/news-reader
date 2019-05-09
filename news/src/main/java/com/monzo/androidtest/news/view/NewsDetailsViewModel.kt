@@ -19,7 +19,6 @@ import kotlin.coroutines.CoroutineContext
 class NewsDetailsViewModel @Inject constructor(
         @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>,
         private val dataPersister: DataPersister<List<Article>>
-
 ) : ViewModel(), CoroutineScope {
 
     private val job = Job()

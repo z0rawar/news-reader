@@ -41,6 +41,7 @@ dependencies {
     implementation(Libraries.constraintLayout)
     implementation(Libraries.glide)
     kapt(Libraries.glideCompiler)
+    testImplementation(Libraries.archTesting)
 
 
 
