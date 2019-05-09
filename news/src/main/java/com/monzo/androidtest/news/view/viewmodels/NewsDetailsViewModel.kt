@@ -73,8 +73,8 @@ class NewsDetailsViewModel @Inject constructor(
     private fun toggleFavourite(favourite: Boolean) {
         launch(uiContext) {
             mutableFavouritesLiveData.value = when (favourite) {
-                true -> FavouritesViewState.Favourite()
-                false -> FavouritesViewState.NonFavourite()
+                true -> FavouritesViewState.Favourite
+                false -> FavouritesViewState.NonFavourite
             }
         }
     }

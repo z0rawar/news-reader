@@ -1,6 +1,5 @@
 package com.monzo.androidtest.news.di
 
-import com.monzo.androidtest.core.di.CoreNetworkModule
 import com.monzo.androidtest.news.api.GuardianService
 import com.monzo.androidtest.news.di.NewsModule.Companion.GUARDIAN_API_KEY
 import com.monzo.androidtest.news.di.NewsModule.Companion.HEADER_API_KEY
@@ -13,8 +12,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
-@Module(includes = [CoreNetworkModule::class])
+@Module
 object NetworkModule {
+
+    const val BASE_URL = "https://content.guardianapis.com"
 
     @Provides
     @JvmStatic
@@ -30,10 +31,9 @@ object NetworkModule {
     @Provides
     @JvmStatic
     internal fun providesOkHttpClient(
-            builder: OkHttpClient.Builder,
             apiKeyInterceptor: Interceptor
     ): OkHttpClient =
-            builder.addInterceptor(apiKeyInterceptor)
+            OkHttpClient.Builder().addInterceptor(apiKeyInterceptor)
                     .build()
 
     @Provides
@@ -41,7 +41,7 @@ object NetworkModule {
     @JvmStatic
     internal fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
             Retrofit.Builder()
-                    .baseUrl("https://content.guardianapis.com")
+                    .baseUrl(BASE_URL)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()

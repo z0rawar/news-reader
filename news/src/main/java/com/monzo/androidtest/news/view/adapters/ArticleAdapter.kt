@@ -18,10 +18,13 @@ import java.util.*
 internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val articles = ArrayList<Any>()
+
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
     override fun getItemCount(): Int = articles.size
 
     override fun getItemViewType(position: Int): Int {
+        //TODO Refactor: Implement a ListItem interface that overrides getViewType and returns VIEW_TYPE Enum
         return if (articles[position] is String) 0 else 1
     }
 

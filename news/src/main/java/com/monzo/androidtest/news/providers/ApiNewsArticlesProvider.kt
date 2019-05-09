@@ -22,6 +22,9 @@ class ApiNewsArticlesProvider(
         const val GET_ARTICLE_QUERY_PARAM = "body,thumbnail,headline"
     }
 
+    /**
+     * Network call to fetch a list of articles filtered by query params and sorted by relevance
+     */
     override fun requestData(callback: (item: NewsArticlesState) -> Unit) {
         callback(NewsArticlesState.Loading)
         apiService.searchArticles(SEARCH_QUERY_PARAM).enqueue(object : Callback<ApiArticleListResponse> {
@@ -37,6 +40,11 @@ class ApiNewsArticlesProvider(
         })
     }
 
+    /**
+     * Network call to fetch the body of a particular news article
+     *
+     * @param id The articleId to be fetched
+     */
     override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
         callback(NewsArticlesState.Loading)
         apiService.getArticle(id, GET_ARTICLE_QUERY_PARAM).enqueue(object : Callback<ApiArticleDetailResponse> {

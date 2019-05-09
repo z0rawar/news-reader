@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -15,10 +16,9 @@ import com.monzo.androidtest.news.view.NewsConstants
 import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewModel
 import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewState
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_news_details.*
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import javax.inject.Inject
-
-
 
 class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
 
@@ -43,6 +43,7 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar()
         rvArticlesList.also {
             it.adapter = articleAdapter
             it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -51,7 +52,12 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
             newsArticlesViewModel.onListRefreshed()
         }
     }
-
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
+    }
     private fun viewStateChanged(newState: NewsArticlesViewState) {
         srlArticlesList.isRefreshing = newState is NewsArticlesViewState.InProgress
         when (newState) {
@@ -62,6 +68,7 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
     }
 
     private fun showArticles(newsArticles: List<Any>) {
+        //Trick to scroll rv up and animate when first item in the list is favourited
         val recyclerViewState = rvArticlesList.layoutManager?.onSaveInstanceState()
         articleAdapter.showArticles(newsArticles)
         rvArticlesList.layoutManager?.onRestoreInstanceState(recyclerViewState)
@@ -72,7 +79,7 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(articleId: String) {
-        //Refactor: Add proper navigation support
+        //TODO Refactor: Add proper navigation support
         val fragment = NewsDetailsFragment().apply {
             arguments = Bundle().apply {
                 this.putString(NewsConstants.BUNDLE_PARAM_ARTICLE_ID, articleId)

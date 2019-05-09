@@ -40,7 +40,6 @@
                 android:layout_height="56dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title=""
                 />
 
             <ImageView

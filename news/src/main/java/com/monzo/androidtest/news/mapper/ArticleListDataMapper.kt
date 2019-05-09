@@ -5,7 +5,7 @@ import com.monzo.androidtest.news.api.ApiArticle
 import com.monzo.androidtest.news.api.ApiArticleListResponse
 import com.monzo.androidtest.news.api.Article
 
-class ArticleListDataMapper(val articleDataMapper: DataMapper<ApiArticle, List<Article>>) :
+class ArticleListDataMapper(private val articleDataMapper: DataMapper<ApiArticle, List<Article>>) :
         DataMapper<ApiArticleListResponse, List<Article>> {
 
 

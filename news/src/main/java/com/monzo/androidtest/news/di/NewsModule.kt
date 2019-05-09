@@ -26,7 +26,7 @@ abstract class NewsModule {
     companion object {
         const val REMOTE_DATASOURCE = "REMOTE"
         const val LOCAL_DATASOURCE = "LOCAL"
-        const val GUARDIAN_API_KEY = "enj8pstqu5yat6yesfsdmd39"
+        const val GUARDIAN_API_KEY = "enj8pstqu5yat6yesfsdmd39" //TODO Hide API keys
         const val HEADER_API_KEY = "api-key"
         const val UI_CONTEXT = "uiContext"
         const val IO_CONTEXT = "ioContext"

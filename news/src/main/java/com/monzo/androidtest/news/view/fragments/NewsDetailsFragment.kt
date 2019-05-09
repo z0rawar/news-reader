@@ -30,7 +30,6 @@ class NewsDetailsFragment : DaggerFragment() {
     private lateinit var newsDetailsViewModel: NewsDetailsViewModel
     private lateinit var articleId: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         newsDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
@@ -46,6 +45,13 @@ class NewsDetailsFragment : DaggerFragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        newsDetailsViewModel.loadNewsArticleDetails(articleId)
+        setupToolbar()
+        ivFav.setOnClickListener { onFavClicked() }
+    }
+
     private fun favouritesViewStateChanged(state: FavouritesViewState?) {
         when (state) {
             is FavouritesViewState.Favourite -> showFilledHeart()
@@ -56,7 +62,7 @@ class NewsDetailsFragment : DaggerFragment() {
     private fun detailViewStateChanged(state: NewsDetailsViewState) {
         progressBar.visibility = if (state is NewsDetailsViewState.InProgress) View.VISIBLE else View.GONE
         when (state) {
-            is NewsDetailsViewState.InProgress -> Log.d("NewsDetailsFragment","Loading from API")
+            is NewsDetailsViewState.InProgress -> Log.d("NewsDetailsFragment", "Loading from API")
             is NewsDetailsViewState.ShowNewsDetails -> showNewsDetails(state.newsArticle)
             is NewsDetailsViewState.ShowErrorMessage -> showError(state.errorMessage)
         }
@@ -68,13 +74,6 @@ class NewsDetailsFragment : DaggerFragment() {
 
     private fun showFilledHeart() {
         ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        newsDetailsViewModel.loadNewsArticleDetails(articleId)
-        setupToolbar()
-        ivFav.setOnClickListener { onFavClicked() }
     }
 
     private fun onFavClicked() {
@@ -97,14 +96,16 @@ class NewsDetailsFragment : DaggerFragment() {
     private fun showNewsDetails(newsArticle: Article) {
         tvTitle.text = newsArticle.title
         Glide.with(this).load(newsArticle.thumbnail).into(ivThumbnail)
+        if (newsArticle.favourite) ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
         newsArticle.body?.let {
             wvDetail.settings.setJavaScriptEnabled(true)
             wvDetail.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            wvDetail.loadDataWithBaseURL(null, "${getString(R.string.webview_width_fix)}${newsArticle.body}",
+            //Trick to set max width of WebView to match the device width
+            wvDetail.loadDataWithBaseURL(null,
+                    "${getString(R.string.webview_width_fix)}${newsArticle.body}",
                     "text/html", "utf-8", null)
 
         }
-        if (newsArticle.favourite) ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
 
     }
 }
