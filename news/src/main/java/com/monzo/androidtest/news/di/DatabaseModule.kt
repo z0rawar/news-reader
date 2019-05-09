@@ -12,11 +12,13 @@ import com.monzo.androidtest.news.data.NewsArticle
 import com.monzo.androidtest.news.data.NewsDatabase
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 object DatabaseModule {
 
     @Provides
+    @Singleton
     @JvmStatic
     internal fun providesDatabase(context: Application): NewsDatabase =
             Room.databaseBuilder(context, NewsDatabase::class.java, "news")
@@ -24,6 +26,7 @@ object DatabaseModule {
                     .build()
 
     @Provides
+    @Singleton
     @JvmStatic
     internal fun providesArticlesDao(database: NewsDatabase): ArticlesDao =
             database.articlesDao()

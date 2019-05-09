@@ -8,16 +8,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class ApiNewsArticlesProvider(
         private val apiService: GuardianService,
         private val mapper: DataMapper<ApiArticleListResponse, List<Article>>
 ) : DataProvider<NewsArticlesState> {
 
     override fun requestData(callback: (item: NewsArticlesState) -> Unit) {
+        callback(NewsArticlesState.Loading)
         apiService.searchArticles("fintech,brexit").enqueue(object : Callback<ApiArticleListResponse> {
             override fun onFailure(call: Call<ApiArticleListResponse>, t: Throwable) {
-                Log.d("z", "failed " + t.localizedMessage)
                 callback(NewsArticlesState.Error(t.localizedMessage))
             }
 
@@ -32,7 +31,6 @@ class ApiNewsArticlesProvider(
     override fun requestData(id: String, callback: (item: NewsArticlesState) -> Unit) {
         apiService.getArticle(id, "body,thumbnail,headline").enqueue(object : Callback<ApiArticleDetailResponse> {
             override fun onFailure(call: Call<ApiArticleDetailResponse>, t: Throwable) {
-                Log.d("z", "failed " + t.localizedMessage)
                 callback(NewsArticlesState.Error(t.localizedMessage))
             }
 

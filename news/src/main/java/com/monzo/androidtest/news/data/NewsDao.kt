@@ -5,12 +5,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.lifecycle.LiveData
 
 @Dao
 abstract class ArticlesDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insertAllArticles(articles: List<NewsArticle>)
+
+    @Query("SELECT * FROM NewsArticle")
+    abstract fun getAllArticlesLiveData(): LiveData<List<NewsArticle>>
 
     @Query("SELECT * FROM NewsArticle")
     abstract fun getAllArticles(): List<NewsArticle>

@@ -3,18 +3,21 @@ package com.monzo.androidtest.news
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.monzo.androidtest.news.api.Article
 import kotlinx.android.synthetic.main.list_item_article.view.*
 import kotlinx.android.synthetic.main.list_item_header.view.*
+import java.text.SimpleDateFormat
 import java.util.*
-import com.bumptech.glide.Glide
 
 
 internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val articles = ArrayList<Any>()
-
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
     override fun getItemCount(): Int = articles.size
 
     override fun getItemViewType(position: Int): Int {
@@ -26,35 +29,42 @@ internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.
         return if (viewType == 0) {
             val view = layoutInflater.inflate(R.layout.list_item_header, parent, false)
             HeaderViewHolder(view)
-        }
-        else {
+        } else {
             val view = layoutInflater.inflate(R.layout.list_item_article, parent, false)
-            ArticleViewHolder(view,listener)
+            ArticleViewHolder(view, listener, dateFormat)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemViewType ==0) {
+        if (holder.itemViewType == 0) {
             val headerViewHolder = holder as HeaderViewHolder
             headerViewHolder.bind(articles[position] as String)
-        } else{
+        } else {
             val articleViewHolder = holder as ArticleViewHolder
             articleViewHolder.bind(articles[position] as Article)
         }
     }
 
     fun showArticles(articles: List<Any>) {
+        val difference = DiffUtil.calculateDiff(ArticlesDiffUtil(this.articles, articles))
         this.articles.clear()
         this.articles.addAll(articles)
-        notifyDataSetChanged()
+        difference.dispatchUpdatesTo(this)
     }
 
-    internal class ArticleViewHolder(view: View, val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+    internal class ArticleViewHolder(
+            view: View,
+            private val listener: OnItemClickListener,
+            private val dateFormat: SimpleDateFormat
+    ) : RecyclerView.ViewHolder(view) {
 
         fun bind(article: Article) {
             itemView.tvArticleHeadline.text = article.title
             itemView.setOnClickListener { listener.onItemClick(article.id) }
-            Glide.with(itemView.ivArticleThumbnail).load(article.thumbnail).into(itemView.ivArticleThumbnail)
+            itemView.tvArticleDate.text = dateFormat.format(article.published)
+            Glide.with(itemView.ivArticleThumbnail).load(article.thumbnail)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(itemView.ivArticleThumbnail)
         }
     }
 
@@ -64,8 +74,28 @@ internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick(articleId: String)
     }
+
+    private class ArticlesDiffUtil(
+            private val oldList: List<Any>,
+            private val newList: List<Any>
+    ) : DiffUtil.Callback() {
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                oldList[oldItemPosition] == newList[newItemPosition]
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return if (oldList[oldItemPosition] is String)
+                true
+            else (oldList[oldItemPosition] as Article).id == (newList[newItemPosition] as Article).id
+        }
+
+    }
+
 
 }

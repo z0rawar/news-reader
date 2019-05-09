@@ -1,5 +1,8 @@
 package com.monzo.androidtest.news.entities
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.monzo.androidtest.core.di.providers.DataPersister
 import com.monzo.androidtest.core.di.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
@@ -22,12 +25,36 @@ class NewsArticlesRepository(
                         GlobalScope.launch(Dispatchers.IO) {
                             persister.insertData(state.articles)
                         }
-                    }
-                    callback(state)
+                    } else
+                        callback(state)
                 }
             } else {
                 callback(NewsArticlesState.Success(articles))
             }
+        }
+    }
+
+    override fun requestLiveData(callback: (item: LiveData<NewsArticlesState>) -> Unit) {
+        val mediatorLiveData = MediatorLiveData<NewsArticlesState>()
+        persister.requestLiveData { liveData ->
+            mediatorLiveData.addSource(liveData) { articles: List<Article>? ->
+                when {
+                    articles == null -> mediatorLiveData.value = NewsArticlesState.Error("Error loading articles")
+                    articles.isEmpty() -> {
+                        mediatorLiveData.value = NewsArticlesState.Loading
+                        provider.requestData { state ->
+                            if (state is NewsArticlesState.Success) {
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    persister.insertData(state.articles)
+                                }
+                            } else
+                                mediatorLiveData.value = state
+                        }
+                    }
+                    else -> mediatorLiveData.value = NewsArticlesState.Success(articles)
+                }
+            }
+            callback(mediatorLiveData)
         }
     }
 

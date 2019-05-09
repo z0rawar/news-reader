@@ -1,5 +1,7 @@
 package com.monzo.androidtest.news.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.monzo.androidtest.core.di.providers.DataMapper
 import com.monzo.androidtest.core.di.providers.DataPersister
 import com.monzo.androidtest.news.api.Article
@@ -16,6 +18,16 @@ class DatabaseNewsArticlesPersister(
     override fun requestData(callback: (item: List<Article>) -> Unit) {
         val articles = dao.getAllArticles().map { mapper.decode(it) }
         callback(articles)
+    }
+
+    override fun requestLiveData(callback: (item: LiveData<List<Article>>) -> Unit) {
+        val articlesLiveData = Transformations.map(dao.getAllArticlesLiveData())
+        { input ->
+            input.map {
+                mapper.decode(it)
+            }
+        }
+        callback(articlesLiveData)
     }
 
     override fun requestData(id: String, callback: (item: List<Article>) -> Unit) {

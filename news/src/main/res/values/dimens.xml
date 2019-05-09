@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="width_iv_thumbnail_article_item">35dp</dimen>
+    <dimen name="hw_iv_thumbnail_article_item">40dp</dimen>
     <dimen name="control_space_mini">4dp</dimen>
     <dimen name="control_space">8dp</dimen>
+    <dimen name="control_space_double">16dp</dimen>
 </resources>

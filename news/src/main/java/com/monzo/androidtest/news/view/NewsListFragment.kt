@@ -11,10 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.monzo.androidtest.news.ArticleAdapter
-import com.monzo.androidtest.news.R
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import javax.inject.Inject
+
+
 
 class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
 
@@ -22,17 +23,18 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var newsArticlesViewModel: NewsArticlesViewModel
     private lateinit var articleAdapter: ArticleAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsArticlesViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+        newsArticlesViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(NewsArticlesViewModel::class.java)
         articleAdapter = ArticleAdapter(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_news_list, container, false)
-        newsArticlesViewModel.newsArticlesViewState
-                .observe(this, Observer { newState -> viewStateChanged(newState) })
+        val view = inflater.inflate(com.monzo.androidtest.news.R.layout.fragment_news_list, container, false)
+        newsArticlesViewModel.newsArticlesViewState.observe(this,
+                Observer { newState -> viewStateChanged(newState) })
         return view
     }
 
@@ -42,14 +44,25 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
             it.adapter = articleAdapter
             it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
+        srlArticlesList.setOnRefreshListener {
+            newsArticlesViewModel.onListRefreshed()
+        }
     }
 
-    private fun viewStateChanged(newState: NewsArticlesViewState) =
-            when (newState) {
-                NewsArticlesViewState.InProgress -> showToast("Loading..")
-                is NewsArticlesViewState.ShowNewsArticles -> articleAdapter.showArticles(newState.newsArticles)
-                is NewsArticlesViewState.ShowErrorMessage -> showToast("Error")
-            }
+    private fun viewStateChanged(newState: NewsArticlesViewState) {
+        srlArticlesList.isRefreshing = newState is NewsArticlesViewState.InProgress
+        when (newState) {
+            is NewsArticlesViewState.InProgress -> Log.d("NewsListFragment", "Loading")
+            is NewsArticlesViewState.ShowNewsArticles -> showArticles(newState.newsArticles)
+            is NewsArticlesViewState.ShowErrorMessage -> showToast(newState.errorMessage)
+        }
+    }
+
+    private fun showArticles(newsArticles: List<Any>) {
+        val recyclerViewState = rvArticlesList.layoutManager?.onSaveInstanceState()
+        articleAdapter.showArticles(newsArticles)
+        rvArticlesList.layoutManager?.onRestoreInstanceState(recyclerViewState)
+    }
 
     private fun showToast(toastMsg: String) {
         Toast.makeText(activity, toastMsg, Toast.LENGTH_SHORT).show()
@@ -59,11 +72,11 @@ class NewsListFragment : DaggerFragment(), ArticleAdapter.OnItemClickListener {
         //Refactor: Add proper navigation support
         val fragment = NewsDetailsFragment().apply {
             arguments = Bundle().apply {
-                this.putString("articleId", articleId)
+                this.putString(NewsConstants.BUNDLE_PARAM_ARTICLE_ID, articleId)
             }
         }
         activity?.supportFragmentManager?.beginTransaction()?.apply {
-            replace(R.id.container, fragment)
+            replace(com.monzo.androidtest.news.R.id.container, fragment)
             addToBackStack(NewsDetailsFragment::class.java.simpleName)
             commit()
         }

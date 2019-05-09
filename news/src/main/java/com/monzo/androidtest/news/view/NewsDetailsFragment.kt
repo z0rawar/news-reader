@@ -28,27 +28,32 @@ class NewsDetailsFragment : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+        newsDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(NewsDetailsViewModel::class.java)
-        articleId = arguments?.getString("articleId", "invalid") ?: "invalid"
+        articleId = arguments?.getString(NewsConstants.BUNDLE_PARAM_ARTICLE_ID,
+                NewsConstants.INVALID_ARTICLE_ID) ?: NewsConstants.INVALID_ARTICLE_ID
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_news_details, container, false)
-        newsDetailsViewModel.newsDetailsViewState.observe(this, Observer {
-            when (it) {
-                is NewsDetailsViewState.InProgress -> showLoading()
-                is NewsDetailsViewState.ShowNewsDetails -> showNewsDetails(it.newsArticle)
-                is NewsDetailsViewState.ShowErrorMessage -> showError(it.errorMessage)
-            }
-        })
-        newsDetailsViewModel.favouritesViewState.observe(this, Observer {
-            when (it) {
-                is FavouritesViewState.Favourite -> showFilledHeart()
-                is FavouritesViewState.NonFavourite -> showEmptyHeart()
-            }
-        })
+        newsDetailsViewModel.newsDetailsViewState.observe(this, Observer { detailViewStateChanged(it) })
+        newsDetailsViewModel.favouritesViewState.observe(this, Observer { favouritesViewStateChanged(it) })
         return view
+    }
+
+    private fun favouritesViewStateChanged(state: FavouritesViewState?) {
+        when (state) {
+            is FavouritesViewState.Favourite -> showFilledHeart()
+            is FavouritesViewState.NonFavourite -> showEmptyHeart()
+        }
+    }
+
+    private fun detailViewStateChanged(state: NewsDetailsViewState) {
+        when (state) {
+            is NewsDetailsViewState.InProgress -> showLoading()
+            is NewsDetailsViewState.ShowNewsDetails -> showNewsDetails(state.newsArticle)
+            is NewsDetailsViewState.ShowErrorMessage -> showError(state.errorMessage)
+        }
     }
 
     private fun showEmptyHeart() {

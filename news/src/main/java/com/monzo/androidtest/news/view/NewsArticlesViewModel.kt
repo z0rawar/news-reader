@@ -1,7 +1,7 @@
 package com.monzo.androidtest.news.view
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.monzo.androidtest.core.di.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
@@ -22,14 +22,14 @@ class NewsArticlesViewModel @Inject constructor(
         @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>
 ) : ViewModel(), CoroutineScope {
 
-    private val job = Job()
-    private val mutableLiveData: MutableLiveData<NewsArticlesViewState> = MutableLiveData()
-
+    private var mediatorLiveData: MediatorLiveData<NewsArticlesViewState> = MediatorLiveData()
     val newsArticlesViewState: LiveData<NewsArticlesViewState>
-        get() = mutableLiveData
+        get() = mediatorLiveData
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
+
+    private val job = Job()
 
     companion object {
         const val WEEK_IN_MILLIS = 604800000L
@@ -38,6 +38,7 @@ class NewsArticlesViewModel @Inject constructor(
     init {
         loadNewsArticles()
     }
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -45,8 +46,32 @@ class NewsArticlesViewModel @Inject constructor(
 
     private fun loadNewsArticles() {
         launch(Dispatchers.IO) {
-            dataProvider.requestData { item ->
-                updateView(item)
+            dataProvider.requestLiveData {
+                updateView(it)
+            }
+        }
+    }
+
+    fun onListRefreshed() {
+        launch(Dispatchers.IO) {
+            dataProvider.requestData {
+                updateView(it)
+            }
+        }
+    }
+
+    private fun updateView(item: LiveData<NewsArticlesState>) {
+        launch {
+            withContext(Dispatchers.Main) {
+                mediatorLiveData.addSource(item) { newsArticleState: NewsArticlesState? ->
+                    if (newsArticleState != null) {
+                        mediatorLiveData.value = when (newsArticleState) {
+                            is NewsArticlesState.Loading -> NewsArticlesViewState.InProgress
+                            is NewsArticlesState.Success -> NewsArticlesViewState.ShowNewsArticles(getGroupedArticles(newsArticleState.articles))
+                            is NewsArticlesState.Error -> NewsArticlesViewState.ShowErrorMessage(newsArticleState.error)
+                        }
+                    }
+                }
             }
         }
     }
@@ -54,7 +79,7 @@ class NewsArticlesViewModel @Inject constructor(
     private fun updateView(item: NewsArticlesState) =
             launch {
                 withContext(Dispatchers.Main) {
-                    mutableLiveData.value = when (item) {
+                    mediatorLiveData.value = when (item) {
                         is NewsArticlesState.Loading -> NewsArticlesViewState.InProgress
                         is NewsArticlesState.Success -> NewsArticlesViewState.ShowNewsArticles(getGroupedArticles(item.articles))
                         is NewsArticlesState.Error -> NewsArticlesViewState.ShowErrorMessage(item.error)
@@ -85,4 +110,5 @@ class NewsArticlesViewModel @Inject constructor(
         }
         return groupedList
     }
+
 }
