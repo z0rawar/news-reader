@@ -2,12 +2,12 @@ package com.monzo.androidtest.news.di
 
 import android.app.Application
 import androidx.room.Room
-import com.monzo.androidtest.core.di.providers.DataMapper
-import com.monzo.androidtest.core.di.providers.DataPersister
+import com.monzo.androidtest.core.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataPersister
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.data.ArticlesDao
-import com.monzo.androidtest.news.data.DatabaseArticlesMapper
-import com.monzo.androidtest.news.data.DatabaseNewsArticlesPersister
+import com.monzo.androidtest.news.mapper.DatabaseArticlesMapper
+import com.monzo.androidtest.news.providers.DatabaseNewsArticlesPersister
 import com.monzo.androidtest.news.data.NewsArticle
 import com.monzo.androidtest.news.data.NewsDatabase
 import dagger.Module

@@ -2,9 +2,11 @@ package com.monzo.androidtest.news.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.monzo.androidtest.core.di.providers.DataProvider
+import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.entities.NewsArticlesState
+import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewModel
+import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewState
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers.Unconfined

@@ -2,7 +2,7 @@ package com.monzo.androidtest
 
 import android.os.Bundle
 import android.view.MenuItem
-import com.monzo.androidtest.news.view.NewsListFragment
+import com.monzo.androidtest.news.view.fragments.NewsListFragment
 import dagger.android.support.DaggerAppCompatActivity
 
 

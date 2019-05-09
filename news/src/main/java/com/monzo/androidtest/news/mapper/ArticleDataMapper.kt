@@ -1,6 +1,8 @@
-package com.monzo.androidtest.news.api
+package com.monzo.androidtest.news.mapper
 
-import com.monzo.androidtest.core.di.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataMapper
+import com.monzo.androidtest.news.api.ApiArticle
+import com.monzo.androidtest.news.api.Article
 
 class ArticleDataMapper : DataMapper<ApiArticle, List<Article>> {
 

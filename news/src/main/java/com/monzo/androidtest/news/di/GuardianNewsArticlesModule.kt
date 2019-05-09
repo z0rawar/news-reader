@@ -1,13 +1,13 @@
 package com.monzo.androidtest.news.di
 
-import com.monzo.androidtest.core.di.providers.DataMapper
-import com.monzo.androidtest.core.di.providers.DataProvider
+import com.monzo.androidtest.core.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.ApiArticle
 import com.monzo.androidtest.news.api.ApiArticleListResponse
-import com.monzo.androidtest.news.api.ApiNewsArticlesProvider
+import com.monzo.androidtest.news.providers.ApiNewsArticlesProvider
 import com.monzo.androidtest.news.api.Article
-import com.monzo.androidtest.news.api.ArticleDataMapper
-import com.monzo.androidtest.news.api.ArticleListDataMapper
+import com.monzo.androidtest.news.mapper.ArticleDataMapper
+import com.monzo.androidtest.news.mapper.ArticleListDataMapper
 import com.monzo.androidtest.news.api.GuardianService
 import com.monzo.androidtest.news.entities.NewsArticlesState
 import dagger.Module
@@ -32,9 +32,9 @@ object GuardianNewsArticlesModule {
     }
     @Provides
     @JvmStatic
-    internal fun providesArticlesApiResponseDataMapper(articleDataMapper: DataMapper<ApiArticle,List<Article>>):
+    internal fun providesArticlesApiResponseDataMapper(articleDataMapper: DataMapper<ApiArticle, List<Article>>):
             DataMapper<ApiArticleListResponse,
-            List<Article>> {
+                    List<Article>> {
         return ArticleListDataMapper(articleDataMapper)
     }
 }

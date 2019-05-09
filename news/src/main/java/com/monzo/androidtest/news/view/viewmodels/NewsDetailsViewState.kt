@@ -1,4 +1,4 @@
-package com.monzo.androidtest.news.view
+package com.monzo.androidtest.news.view.viewmodels
 
 import com.monzo.androidtest.news.api.Article
 

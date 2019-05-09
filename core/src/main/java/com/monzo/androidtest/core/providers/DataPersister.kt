@@ -1,4 +1,4 @@
-package com.monzo.androidtest.core.di.providers
+package com.monzo.androidtest.core.providers
 
 interface DataPersister<T> : DataProvider<T> {
     fun insertData(data: T)

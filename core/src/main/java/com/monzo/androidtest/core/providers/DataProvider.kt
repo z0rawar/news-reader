@@ -1,4 +1,4 @@
-package com.monzo.androidtest.core.di.providers
+package com.monzo.androidtest.core.providers
 
 import androidx.lifecycle.LiveData
 

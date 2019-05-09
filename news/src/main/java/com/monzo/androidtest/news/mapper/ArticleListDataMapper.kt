@@ -1,6 +1,9 @@
-package com.monzo.androidtest.news.api
+package com.monzo.androidtest.news.mapper
 
-import com.monzo.androidtest.core.di.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataMapper
+import com.monzo.androidtest.news.api.ApiArticle
+import com.monzo.androidtest.news.api.ApiArticleListResponse
+import com.monzo.androidtest.news.api.Article
 
 class ArticleListDataMapper(val articleDataMapper: DataMapper<ApiArticle, List<Article>>) :
         DataMapper<ApiArticleListResponse, List<Article>> {
@@ -8,14 +11,9 @@ class ArticleListDataMapper(val articleDataMapper: DataMapper<ApiArticle, List<A
 
     override fun encode(source: ApiArticleListResponse): List<Article> {
         val articles = ArrayList<Article>()
-
-//        for ((id, sectionId, sectionName, webPublicationDate, _, _, apiUrl, fields) in source.response.results) {
-
-        for(article in source.response.results) {
+        for (article in source.response.results) {
             articles.addAll(articleDataMapper.encode(article))
         }
-//        }
-
         return articles
     }
 }

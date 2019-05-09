@@ -1,4 +1,4 @@
-package com.monzo.androidtest.news.view
+package com.monzo.androidtest.news.view.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.monzo.androidtest.news.ArticleAdapter
+import com.monzo.androidtest.news.view.adapters.ArticleAdapter
+import com.monzo.androidtest.news.view.NewsConstants
+import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewModel
+import com.monzo.androidtest.news.view.viewmodels.NewsArticlesViewState
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import javax.inject.Inject

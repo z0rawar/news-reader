@@ -5,16 +5,15 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 
 @Module
-object CoreNetworkModule{
+object CoreNetworkModule {
 
     @Provides
     @JvmStatic
     internal fun providesOkHttpClientBuilder(
-//            loggingInterceptor: HttpLoggingInterceptor?
     ): OkHttpClient.Builder =
             OkHttpClient.Builder()
                     .apply {
-                        //                        loggingInterceptor?.also {
+//                        loggingInterceptor?.also {
 //                            addInterceptor(it)
 //                        }
                     }

@@ -1,10 +1,12 @@
-package com.monzo.androidtest.news.data
+package com.monzo.androidtest.news.providers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.monzo.androidtest.core.di.providers.DataMapper
-import com.monzo.androidtest.core.di.providers.DataPersister
+import com.monzo.androidtest.core.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataPersister
 import com.monzo.androidtest.news.api.Article
+import com.monzo.androidtest.news.data.ArticlesDao
+import com.monzo.androidtest.news.data.NewsArticle
 
 class DatabaseNewsArticlesPersister(
         private val dao: ArticlesDao,

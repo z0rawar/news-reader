@@ -1,12 +1,12 @@
-package com.monzo.androidtest.news.entities
+package com.monzo.androidtest.news.providers
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.monzo.androidtest.core.di.providers.DataPersister
-import com.monzo.androidtest.core.di.providers.DataProvider
+import com.monzo.androidtest.core.providers.DataPersister
+import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.di.NewsModule
+import com.monzo.androidtest.news.entities.NewsArticlesState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

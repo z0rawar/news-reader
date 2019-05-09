@@ -1,7 +1,8 @@
-package com.monzo.androidtest.news.data
+package com.monzo.androidtest.news.mapper
 
-import com.monzo.androidtest.core.di.providers.DataMapper
+import com.monzo.androidtest.core.providers.DataMapper
 import com.monzo.androidtest.news.api.Article
+import com.monzo.androidtest.news.data.NewsArticle
 import java.util.*
 
 class DatabaseArticlesMapper : DataMapper<Article, NewsArticle> {
@@ -21,7 +22,7 @@ class DatabaseArticlesMapper : DataMapper<Article, NewsArticle> {
     override fun decode(source: NewsArticle): Article {
         return Article(id = source.id,
                 thumbnail = source.thumbnail,
-                published = Date(source.published), //TODO Move to utils, extension fucntion
+                published = Date(source.published),
                 sectionId = source.sectionId,
                 sectionName = source.sectionName,
                 title = source.title,

@@ -1,10 +1,10 @@
-package com.monzo.androidtest.news.view
+package com.monzo.androidtest.news.view.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.monzo.androidtest.core.di.providers.DataPersister
-import com.monzo.androidtest.core.di.providers.DataProvider
+import com.monzo.androidtest.core.providers.DataPersister
+import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.di.NewsModule
 import com.monzo.androidtest.news.entities.NewsArticlesState
@@ -18,7 +18,9 @@ import kotlin.coroutines.CoroutineContext
 
 class NewsDetailsViewModel @Inject constructor(
         @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>,
-        private val dataPersister: DataPersister<List<Article>>
+        private val dataPersister: DataPersister<List<Article>>,
+        @param:Named(NewsModule.UI_CONTEXT) private val uiContext: CoroutineContext = Dispatchers.Main  ,
+        @param:Named(NewsModule.IO_CONTEXT) private val ioContext: CoroutineContext = Dispatchers.IO
 ) : ViewModel(), CoroutineScope {
 
     private val job = Job()
@@ -33,7 +35,7 @@ class NewsDetailsViewModel @Inject constructor(
         get() = mutableFavouritesLiveData
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+        get() = uiContext + job
 
 
     override fun onCleared() {
@@ -42,7 +44,7 @@ class NewsDetailsViewModel @Inject constructor(
     }
 
     fun loadNewsArticleDetails(id: String) {
-        launch(Dispatchers.IO) {
+        launch(ioContext) {
             dataProvider.requestData(id) { item ->
                 updateView(item)
             }
@@ -50,7 +52,7 @@ class NewsDetailsViewModel @Inject constructor(
     }
 
     private fun updateView(item: NewsArticlesState) {
-        launch(Dispatchers.Main) {
+        launch(uiContext) {
             mutableLiveData.value = when (item) {
                 is NewsArticlesState.Loading -> NewsDetailsViewState.InProgress
                 is NewsArticlesState.Success -> NewsDetailsViewState.ShowNewsDetails(item.articles[0])
@@ -60,7 +62,7 @@ class NewsDetailsViewModel @Inject constructor(
     }
 
     fun onFavClicked(id: String) {
-        launch(Dispatchers.IO) {
+        launch(ioContext) {
             dataPersister.requestData(id) { articles: List<Article> ->
                 dataPersister.updateData(listOf(articles[0].copy(favourite = !articles[0].favourite)))
                 toggleFavourite(!articles[0].favourite)
@@ -69,7 +71,7 @@ class NewsDetailsViewModel @Inject constructor(
     }
 
     private fun toggleFavourite(favourite: Boolean) {
-        launch(Dispatchers.Main) {
+        launch(uiContext) {
             mutableFavouritesLiveData.value = when (favourite) {
                 true -> FavouritesViewState.Favourite()
                 false -> FavouritesViewState.NonFavourite()

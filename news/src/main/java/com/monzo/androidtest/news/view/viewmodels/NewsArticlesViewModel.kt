@@ -1,10 +1,9 @@
-package com.monzo.androidtest.news.view
+package com.monzo.androidtest.news.view.viewmodels
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.monzo.androidtest.core.di.providers.DataProvider
+import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.di.NewsModule
 import com.monzo.androidtest.news.entities.NewsArticlesState
@@ -21,8 +20,8 @@ import kotlin.coroutines.CoroutineContext
 
 class NewsArticlesViewModel @Inject constructor(
         @param:Named(NewsModule.LOCAL_DATASOURCE) private val dataProvider: DataProvider<NewsArticlesState>,
-        private val uiContext: CoroutineContext = Dispatchers.Main,
-        private val ioContext: CoroutineContext = Dispatchers.IO
+        @param:Named(NewsModule.UI_CONTEXT) private val uiContext: CoroutineContext = Dispatchers.Main,
+        @param:Named(NewsModule.IO_CONTEXT) private val ioContext: CoroutineContext = Dispatchers.IO
 ) : ViewModel(), CoroutineScope {
 
     private var mediatorLiveData: MediatorLiveData<NewsArticlesViewState> = MediatorLiveData()
@@ -47,7 +46,7 @@ class NewsArticlesViewModel @Inject constructor(
         job.cancel()
     }
 
-    fun loadNewsArticles() {
+    private fun loadNewsArticles() {
         launch(ioContext) {
             dataProvider.requestLiveData {
                 updateView(it)

@@ -1,7 +1,8 @@
-package com.monzo.androidtest.news.view
+package com.monzo.androidtest.news.view.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.monzo.androidtest.news.R
 import com.monzo.androidtest.news.api.Article
+import com.monzo.androidtest.news.view.NewsConstants
+import com.monzo.androidtest.news.view.viewmodels.FavouritesViewState
+import com.monzo.androidtest.news.view.viewmodels.NewsDetailsViewModel
+import com.monzo.androidtest.news.view.viewmodels.NewsDetailsViewState
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_news_details.*
 import javax.inject.Inject
@@ -49,8 +54,9 @@ class NewsDetailsFragment : DaggerFragment() {
     }
 
     private fun detailViewStateChanged(state: NewsDetailsViewState) {
+        progressBar.visibility = if (state is NewsDetailsViewState.InProgress) View.VISIBLE else View.GONE
         when (state) {
-            is NewsDetailsViewState.InProgress -> showLoading()
+            is NewsDetailsViewState.InProgress -> Log.d("NewsDetailsFragment","Loading from API")
             is NewsDetailsViewState.ShowNewsDetails -> showNewsDetails(state.newsArticle)
             is NewsDetailsViewState.ShowErrorMessage -> showError(state.errorMessage)
         }
@@ -101,10 +107,4 @@ class NewsDetailsFragment : DaggerFragment() {
         if (newsArticle.favourite) ivFav.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_white_24dp))
 
     }
-
-    private fun showLoading() {
-        Toast.makeText(activity, "Loadiong..", Toast.LENGTH_SHORT).show()
-    }
-
-
 }

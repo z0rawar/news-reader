@@ -1,4 +1,4 @@
-package com.monzo.androidtest.core.di.providers
+package com.monzo.androidtest.core.providers
 
 interface DataMapper<S, R> {
     fun encode(source: S) :R
