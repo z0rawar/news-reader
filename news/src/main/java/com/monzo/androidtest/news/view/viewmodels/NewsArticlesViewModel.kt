@@ -7,6 +7,7 @@ import com.monzo.androidtest.core.providers.DataProvider
 import com.monzo.androidtest.news.api.Article
 import com.monzo.androidtest.news.di.NewsModule
 import com.monzo.androidtest.news.entities.NewsArticlesState
+import com.monzo.androidtest.news.view.NewsConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,7 +35,7 @@ class NewsArticlesViewModel @Inject constructor(
     private val job = Job()
 
     companion object {
-        const val WEEK_IN_MILLIS = 604800000L
+        const val WEEK_IN_MILLIS = 100 * 60 * 60 * 24 * 7L
     }
 
     init {
@@ -89,6 +90,13 @@ class NewsArticlesViewModel @Inject constructor(
                 }
             }
 
+    /**
+     * A crude method to filter a list of articles and group them week wise
+     *
+     * TODO Refactor: This can be vastly improved by using a Map<Date,List<Article>> structure
+     * Also, the WEEK_IN_MILLIS is a quick hack which does not give the exact day
+     * This should be replaced by a simpler Calendar.add(Calendar.DAY_OF_YEAR, -days) implementation
+     */
     private fun getGroupedArticles(articles: List<Article>): List<Any> {
         val favArticles = articles.filter { it.favourite }
         val articlesThisWeek = articles.filter {
@@ -99,15 +107,15 @@ class NewsArticlesViewModel @Inject constructor(
         }
         val groupedList = mutableListOf<Any>()
         if (favArticles.isEmpty().not()) {
-            groupedList.add("Favourites")
+            groupedList.add(NewsConstants.FAVOURITES_HEADER)
             groupedList.addAll(favArticles)
         }
         if (articlesThisWeek.isEmpty().not()) {
-            groupedList.add("This week")
+            groupedList.add(NewsConstants.THIS_WEEK_HEADER)
             groupedList.addAll(articlesThisWeek)
         }
         if (articlesLastWeek.isEmpty().not()) {
-            groupedList.add("Last week")
+            groupedList.add(NewsConstants.LAST_WEEK_HEADER)
             groupedList.addAll(articlesLastWeek)
         }
         return groupedList

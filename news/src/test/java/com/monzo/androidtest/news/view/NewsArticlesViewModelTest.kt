@@ -76,15 +76,14 @@ class NewsArticlesViewModelTest {
 
         val value = LiveDataTestUtil.getValue(viewModel.newsArticlesViewState)
         if (value is NewsArticlesViewState.ShowNewsArticles) {
-            assertEquals(value.newsArticles[0], "Favourites")
+            assertEquals(value.newsArticles[0], NewsConstants.FAVOURITES_HEADER)
             assertEquals(value.newsArticles[1], listOfArticles[0])
         } else fail()
     }
 
 
     @Test
-    fun `when list is refreshed - articles list with current week article - should show article with ThisWeek header`
-            () {
+    fun `when list is refreshed - articles list with current week article - should show article with ThisWeek header`() {
 
         val currWeekArticle = Article(id = "002",
                 thumbnail = "",
@@ -107,7 +106,7 @@ class NewsArticlesViewModelTest {
 
         val value = LiveDataTestUtil.getValue(viewModel.newsArticlesViewState)
         if (value is NewsArticlesViewState.ShowNewsArticles) {
-            assertEquals(value.newsArticles[0], "This week")
+            assertEquals(value.newsArticles[0], NewsConstants.THIS_WEEK_HEADER)
             assertEquals(value.newsArticles[1], currWeekArticle)
         } else fail()
     }
@@ -136,7 +135,7 @@ class NewsArticlesViewModelTest {
 
         val value = LiveDataTestUtil.getValue(viewModel.newsArticlesViewState)
         if (value is NewsArticlesViewState.ShowNewsArticles) {
-            assertEquals(value.newsArticles[0], "Last week")
+            assertEquals(value.newsArticles[0], NewsConstants.LAST_WEEK_HEADER)
             assertEquals(value.newsArticles[1], lastWeekArticle)
         } else fail()
     }

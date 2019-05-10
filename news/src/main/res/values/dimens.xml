@@ -4,4 +4,6 @@
     <dimen name="control_space_mini">4dp</dimen>
     <dimen name="control_space">8dp</dimen>
     <dimen name="control_space_double">16dp</dimen>
+    <dimen name="height_article_image">216dp</dimen>
+    <dimen name="hw_fav_icon">24dp</dimen>
 </resources>

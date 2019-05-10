@@ -86,18 +86,21 @@ internal class ArticleAdapter(val listener: OnItemClickListener) : RecyclerView.
             private val oldList: List<Any>,
             private val newList: List<Any>
     ) : DiffUtil.Callback() {
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                oldList[oldItemPosition] == newList[newItemPosition]
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            return when {
+                oldItem is String && newItem is String -> oldItem == newItem
+                oldItem is Article && newItem is Article -> oldItem.id == newItem.id
+                else -> false
+            }
+        }
 
         override fun getOldListSize(): Int = oldList.size
 
         override fun getNewListSize(): Int = newList.size
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return if (oldList[oldItemPosition] is String)
-                true
-            else (oldList[oldItemPosition] as Article).id == (newList[newItemPosition] as Article).id
-        }
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = true
 
     }
 
